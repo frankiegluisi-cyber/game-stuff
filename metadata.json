@@ -1,0 +1,6 @@
+{
+  "name": "Outbreak: Dead Zone - Co-Op Zombie Survival",
+  "description": "An intense wave-based 3D zombie survival game featuring dynamic weather, barricade crafting, perk vending machines, mystery box, and cooperative multiplayer.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

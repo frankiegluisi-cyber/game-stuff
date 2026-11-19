@@ -4831,8 +4831,73 @@
         upgradeTier: 0,
         adsPos: new THREE.Vector3(0.0, -0.066, -0.33),
         adsFov: 48
+      },
+      ak47: {
+        id: 'ak47',
+        name: 'AK-47 Wasteland',
+        type: 'Heavy Assault Rifle',
+        opticType: 'NOTCH IRON SIGHTS',
+        damage: 66,
+        pellets: 1,
+        spread: 0.021,
+        fireDelay: 0.10,
+        isAuto: true,
+        magSize: 30,
+        reserve: 150,
+        maxReserve: 240,
+        reloadTime: 1.85,
+        recoilZ: 0.068,
+        recoilPitch: 0.052,
+        isPap: false,
+        upgradeTier: 0,
+        adsPos: new THREE.Vector3(0.0, -0.076, -0.31),
+        adsFov: 44
+      },
+      g95: {
+        id: 'g95',
+        name: 'HK G95 A1 Tactical',
+        type: 'Precision Carbine',
+        opticType: 'FLIP IRON SIGHTS',
+        damage: 56,
+        pellets: 1,
+        spread: 0.015,
+        fireDelay: 0.084,
+        isAuto: true,
+        magSize: 30,
+        reserve: 180,
+        maxReserve: 270,
+        reloadTime: 1.65,
+        recoilZ: 0.052,
+        recoilPitch: 0.038,
+        isPap: false,
+        upgradeTier: 0,
+        adsPos: new THREE.Vector3(0.0, -0.078, -0.31),
+        adsFov: 43
+      },
+      hk33: {
+        id: 'hk33',
+        name: 'HK33 A3 5.56',
+        type: 'Rapid Assault Rifle',
+        opticType: 'DIOPTER DRUM SIGHT',
+        damage: 52,
+        pellets: 1,
+        spread: 0.018,
+        fireDelay: 0.078,
+        isAuto: true,
+        magSize: 30,
+        reserve: 180,
+        maxReserve: 270,
+        reloadTime: 1.70,
+        recoilZ: 0.050,
+        recoilPitch: 0.036,
+        isPap: false,
+        upgradeTier: 0,
+        adsPos: new THREE.Vector3(0.0, -0.074, -0.31),
+        adsFov: 45
       }
     };
+
+    const WEAPON_DB = WEAPONS;
 
     const PAP_UPGRADES = {
       m1911: {
@@ -4951,6 +5016,39 @@
         reloadTime: 1.85,
         adsPos: new THREE.Vector3(0.0, -0.066, -0.33),
         adsFov: 46
+      },
+      ak47: {
+        name: "Reznov's Vengeance",
+        type: 'Apocalyptic Heavy Rifle',
+        damage: 185,
+        fireDelay: 0.078,
+        magSize: 60,
+        maxReserve: 420,
+        reloadTime: 1.30,
+        adsPos: new THREE.Vector3(0.0, -0.076, -0.31),
+        adsFov: 42
+      },
+      g95: {
+        name: 'G95 Sturm-Phantom',
+        type: 'Hyper-Velocity Carbine',
+        damage: 155,
+        fireDelay: 0.065,
+        magSize: 60,
+        maxReserve: 420,
+        reloadTime: 1.15,
+        adsPos: new THREE.Vector3(0.0, -0.078, -0.31),
+        adsFov: 41
+      },
+      hk33: {
+        name: 'HK33 Kraut-Laser',
+        type: 'High-Cadence Battle Rifle',
+        damage: 145,
+        fireDelay: 0.060,
+        magSize: 60,
+        maxReserve: 420,
+        reloadTime: 1.20,
+        adsPos: new THREE.Vector3(0.0, -0.074, -0.31),
+        adsFov: 43
       }
     };
 
@@ -5385,6 +5483,31 @@
         const arcDot = new THREE.Mesh(new THREE.SphereGeometry(0.0018, 6, 6), new THREE.MeshBasicMaterial({ color: 0xffffff }));
         arcDot.position.set(0, 0.068, -0.05);
         root.add(stock, body, frontPipe, tipCore, arcSight, arcDot);
+      } else if (weaponId === 'ak47' || weaponId === 'g95' || weaponId === 'hk33') {
+        if (typeof window.__cloneLoadedWeaponPreview === 'function') {
+          const glbClone = window.__cloneLoadedWeaponPreview(weaponId, isPap);
+          if (glbClone) return glbClone;
+        }
+        const woodOrPoly = weaponId === 'ak47'
+          ? new THREE.MeshStandardMaterial({ color: 0x6b3e26, roughness: 0.78, metalness: 0.1 })
+          : sharedMatPolymer;
+        const receiver = new THREE.Mesh(new THREE.BoxGeometry(0.056, 0.078, 0.36), metalMat);
+        receiver.position.set(0, 0, 0.04);
+        const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.44, 12), sharedMatChrome);
+        barrel.rotation.x = Math.PI / 2;
+        barrel.position.set(0, 0.016, 0.36);
+        const handguard = new THREE.Mesh(new THREE.BoxGeometry(0.052, 0.058, 0.22), woodOrPoly);
+        handguard.position.set(0, 0.004, 0.27);
+        const stock = new THREE.Mesh(new THREE.BoxGeometry(0.048, 0.095, 0.24), woodOrPoly);
+        stock.position.set(0, -0.02, -0.22);
+        const mag = new THREE.Mesh(new THREE.BoxGeometry(0.042, 0.18, 0.072), metalMat);
+        mag.position.set(0, -0.11, 0.11);
+        mag.rotation.x = weaponId === 'ak47' ? 0.32 : 0.16;
+        const frontPost = new THREE.Mesh(new THREE.BoxGeometry(0.004, 0.026, 0.01), metalMat);
+        frontPost.position.set(0, 0.048, 0.46);
+        const frontDot = new THREE.Mesh(new THREE.SphereGeometry(0.002, 6, 6), tritiumMat);
+        frontDot.position.set(0, 0.058, 0.46);
+        root.add(receiver, barrel, handguard, stock, mag, frontPost, frontDot);
       }
 
       return root;
@@ -5575,7 +5698,13 @@
       polygonOffset: true,
       polygonOffsetFactor: -2
     });
-    const sharedZombieHitboxMat = new THREE.MeshBasicMaterial({ visible: false });
+    const sharedZombieHitboxMat = new THREE.MeshBasicMaterial({
+      visible: false,
+      transparent: true,
+      opacity: 0,
+      depthWrite: false,
+      colorWrite: false
+    });
     const _zombieGeoCache = {};
     function getZombieBoxGeo(w, h, d) {
       const k = `b_${w}_${h}_${d}`;
@@ -9606,10 +9735,15 @@
 
         const mzZ = {
           m1911: -0.62, mp5: -0.78, shotgun: -0.88, m4: -0.9, sniper: -1.1,
-          raygun: -0.76, scar: -0.92, m249: -1.02, spas12: -0.9, wunderwaffe: -0.95
+          raygun: -0.76, scar: -0.92, m249: -1.02, spas12: -0.9, wunderwaffe: -0.95,
+          ak47: -0.92, g95: -0.9, hk33: -0.9
         }[this.activeWeapon.id] || -0.7;
         this.muzzleSprite.position.set(this.isMobileMode ? 0.25 : 0.24, this.isMobileMode ? -0.18 : -0.16, mzZ);
         this.muzzleLight.position.copy(this.muzzleSprite.position);
+
+        if (typeof syncActiveGlbViewmodelVisibility === 'function') {
+          syncActiveGlbViewmodelVisibility(this.activeWeapon.id, this.activeWeapon.isPap);
+        }
 
         const card = document.getElementById('weapon-card');
         card.classList.toggle('pap-active', !!this.activeWeapon.isPap);
@@ -9909,21 +10043,44 @@
           }
         }, { passive: false });
 
+        const resetJoyState = () => {
+          this.joyTouchId = null;
+          this.joyVector.x = 0;
+          this.joyVector.y = 0;
+          this.joyOrigin = { x: 83, y: 113 };
+          if (joyBase) {
+            joyBase.style.left = '24px';
+            joyBase.style.top = '54px';
+            joyBase.classList.remove('active', 'sprinting');
+          }
+          if (joyKnob) {
+            joyKnob.style.left = '60px';
+            joyKnob.style.top = '90px';
+          }
+        };
+        this._resetMobileJoystickUI = resetJoyState;
+
         const endJoy = (e) => {
           e.stopPropagation();
+          if (e.type === 'touchcancel' || !e.touches || e.touches.length === 0) {
+            resetJoyState();
+            return;
+          }
+          let joyStillActive = false;
+          for (let i = 0; i < e.touches.length; i++) {
+            if (e.touches[i].identifier === this.joyTouchId) {
+              joyStillActive = true;
+              break;
+            }
+          }
+          if (!joyStillActive) {
+            resetJoyState();
+            return;
+          }
           for (const t of e.changedTouches) {
             if (t.identifier === this.joyTouchId) {
-              this.joyTouchId = null;
-              this.joyVector.x = 0;
-              this.joyVector.y = 0;
-              this.joyOrigin = { x: 83, y: 113 };
-              if (joyBase) {
-                joyBase.style.left = '24px';
-                joyBase.style.top = '54px';
-                joyBase.classList.remove('active', 'sprinting');
-              }
-              joyKnob.style.left = '60px';
-              joyKnob.style.top = '90px';
+              resetJoyState();
+              break;
             }
           }
         };
@@ -10009,6 +10166,12 @@
         }, { passive: true });
 
         const endLook = (e) => {
+          if (e.type === 'touchcancel') {
+            clearTimeout(this.mobHoldTimer);
+            this.isMouseDown = false;
+            this.lookTouchId = null;
+            return;
+          }
           for (const t of e.changedTouches) {
             if (t.identifier === this.lookTouchId) {
               clearTimeout(this.mobHoldTimer);
@@ -10027,13 +10190,46 @@
         lookZone.addEventListener('touchend', endLook, { passive: true });
         lookZone.addEventListener('touchcancel', endLook, { passive: true });
 
+        window.addEventListener('touchend', (e) => {
+          if (!e.touches || e.touches.length === 0) {
+            resetJoyState();
+            clearTimeout(this.mobHoldTimer);
+            this.isMouseDown = false;
+            this.lookTouchId = null;
+            return;
+          }
+          if (this.joyTouchId !== null) {
+            let foundJoy = false;
+            for (let i = 0; i < e.touches.length; i++) {
+              if (e.touches[i].identifier === this.joyTouchId) { foundJoy = true; break; }
+            }
+            if (!foundJoy) resetJoyState();
+          }
+          if (this.lookTouchId !== null) {
+            let foundLook = false;
+            for (let i = 0; i < e.touches.length; i++) {
+              if (e.touches[i].identifier === this.lookTouchId) { foundLook = true; break; }
+            }
+            if (!foundLook) {
+              clearTimeout(this.mobHoldTimer);
+              this.isMouseDown = false;
+              this.lookTouchId = null;
+            }
+          }
+        }, { passive: true });
+
         window.addEventListener('touchcancel', () => {
           clearTimeout(this.mobHoldTimer);
           this.isMouseDown = false;
-          this.joyTouchId = null;
           this.lookTouchId = null;
-          this.joyVector.x = 0;
-          this.joyVector.y = 0;
+          resetJoyState();
+        });
+
+        window.addEventListener('blur', () => {
+          clearTimeout(this.mobHoldTimer);
+          this.isMouseDown = false;
+          this.lookTouchId = null;
+          resetJoyState();
         });
 
         const bindMobBtn = (id, fn) => {
@@ -10233,8 +10429,11 @@
         // Unique Wall-Buy Weapons placed along enlarged room walls
         addWallBuy('m1911', 250, new THREE.Vector3(-5.5, 2.0, -15.55), 0); // Hub NW
         addWallBuy('mp5', 1000, new THREE.Vector3(5.5, 2.0, -15.55), 0);  // Hub NE (MP5K SMG)
+        addWallBuy('ak47', 1400, new THREE.Vector3(17.55, 2.0, -4.2), -Math.PI / 2); // Hub East Wall (AK-47 Wasteland)
         addWallBuy('shotgun', 1200, new THREE.Vector3(28.0, 2.0, -4.55), 0); // East Wing (Shotgun)
         addWallBuy('m4', 1500, new THREE.Vector3(-28.0, 2.0, -4.55), 0);     // West Wing (M4 Carbine)
+        addWallBuy('g95', 1350, new THREE.Vector3(-17.55, 2.0, -4.2), Math.PI / 2); // Hub West Wall (HK G95 A1 Tactical)
+        addWallBuy('hk33', 1300, new THREE.Vector3(15.55, 2.0, 20.5), -Math.PI / 2); // Courtyard East (HK33 A3 5.56)
         addWallBuy('sniper', 1800, new THREE.Vector3(-15.55, 2.0, 26.0), Math.PI / 2); // Courtyard (L96A1 Sniper)
 
         // Der Wunderfizz Wonder Perk Machine (Hub NE corner)
@@ -10421,6 +10620,21 @@
         if (typeof clearAllActiveHitboxes === 'function') {
           clearAllActiveHitboxes();
         }
+        if (typeof purgeAllPhase2ZombiesAndMixers === 'function') {
+          purgeAllPhase2ZombiesAndMixers();
+        }
+        if (typeof resetMysteryBoxGlbState === 'function') {
+          resetMysteryBoxGlbState();
+        }
+        if (typeof this._resetMobileJoystickUI === 'function') {
+          this._resetMobileJoystickUI();
+        } else {
+          this.joyTouchId = null;
+          this.joyVector.x = 0;
+          this.joyVector.y = 0;
+        }
+        this.lookTouchId = null;
+        this.isMouseDown = false;
         this.stairwellUnlocked = false;
         this.spartanEquipped = false;
         if (this.spartanPedestal && this.spartanPedestal.model) {
@@ -10993,14 +11207,16 @@
         }
 
         const wid = this.activeWeapon.id;
-        if (typeof triggerRayGunFireAnimation === 'function') {
+        if (typeof triggerActiveGlbWeaponFire === 'function') {
+          triggerActiveGlbWeaponFire(wid);
+        } else if (typeof triggerRayGunFireAnimation === 'function') {
           triggerRayGunFireAnimation();
         }
         if (wid === 'm1911') { audio.playPistol(); audio.playLayeredGunshotTransient(118, 2500, 0.28); triggerHaptic(26); }
         else if (wid === 'mp5') { audio.playSmg(); audio.playLayeredGunshotTransient(130, 2750, 0.24); triggerHaptic(18); }
         else if (wid === 'shotgun') { audio.playShotgun(); audio.playLayeredGunshotTransient(82, 1850, 0.44); triggerHaptic([45, 25, 35]); }
-        else if (wid === 'm4' || wid === 'm249') { audio.playRifle(); audio.playLayeredGunshotTransient(108, 2400, 0.32); triggerHaptic(24); }
-        else if (wid === 'scar') { audio.playHeavyRifle(); audio.playLayeredGunshotTransient(92, 2150, 0.38); triggerHaptic(28); }
+        else if (wid === 'm4' || wid === 'm249' || wid === 'g95' || wid === 'hk33') { audio.playRifle(); audio.playLayeredGunshotTransient(108, 2400, 0.32); triggerHaptic(24); }
+        else if (wid === 'scar' || wid === 'ak47') { audio.playHeavyRifle(); audio.playLayeredGunshotTransient(92, 2150, 0.38); triggerHaptic(28); }
         else if (wid === 'spas12') { audio.playAutoShotgun(); audio.playLayeredGunshotTransient(86, 1950, 0.42); triggerHaptic([48, 22, 36]); }
         else if (wid === 'sniper') { audio.playSniper(); audio.playLayeredGunshotTransient(74, 2100, 0.48); triggerHaptic([65, 30, 45]); }
         else if (wid === 'raygun') { audio.playRaygun(); audio.playLayeredGunshotTransient(140, 3200, 0.25); triggerHaptic(32); }
@@ -11012,8 +11228,8 @@
             if (sess !== this.gameSessionId || this.state !== 'PLAYING') return;
             if (wid === 'm1911') audio.playPistol();
             else if (wid === 'mp5') audio.playSmg();
-            else if (wid === 'm4' || wid === 'm249') audio.playRifle();
-            else if (wid === 'scar') audio.playHeavyRifle();
+            else if (wid === 'm4' || wid === 'm249' || wid === 'g95' || wid === 'hk33') audio.playRifle();
+            else if (wid === 'scar' || wid === 'ak47') audio.playHeavyRifle();
           }, 36);
         }
 
@@ -12388,7 +12604,9 @@
         }
         const rbWrap = document.getElementById('reload-bar-wrap');
         if (rbWrap) rbWrap.style.display = 'flex';
-        if (typeof triggerRayGunReloadAnimation === 'function') {
+        if (typeof triggerActiveGlbWeaponReload === 'function') {
+          triggerActiveGlbWeaponReload(rTime);
+        } else if (typeof triggerRayGunReloadAnimation === 'function') {
           triggerRayGunReloadAnimation(rTime);
         }
         audio.playReload(rTime);
@@ -13682,13 +13900,16 @@
         mb.state = 'CYCLING';
         mb.timer = saleActive ? 1.25 : 2.6;
         mb.cycleTicker = 0;
-        mb.light.color.setHex(saleActive ? 0xa855f7 : 0x38bdf8);
+        mb.light.color.setHex(saleActive ? 0xa855f7 : 0xfacc15);
         if (mb.skyBeamMat) {
-          mb.skyBeamMat.color.setHex(saleActive ? 0xa855f7 : 0x38bdf8);
-          mb.skyBeamMat.opacity = 0.28;
+          mb.skyBeamMat.color.setHex(saleActive ? 0xa855f7 : 0xfacc15);
+          mb.skyBeamMat.opacity = 0.32;
         }
         audio.playMysteryBoxJingle();
         mb.lidPivot.rotation.x = -Math.PI / 2.2;
+        if (typeof triggerMysteryBoxGlbRoll === 'function') {
+          triggerMysteryBoxGlbRoll(true, mb.timer);
+        }
 
         // Weighted high-tier pool + ~18% Containment Jinx trap (0% Jinx during Fire Sale!)
         const isJinx = !saleActive && Math.random() < 0.18;
@@ -13697,17 +13918,20 @@
           mb.awardedWeapon = null;
         } else {
           const highTierPool = [
-            { id: 'scar', w: 18 },
-            { id: 'm249', w: 16 },
-            { id: 'spas12', w: 16 },
-            { id: 'm4', w: 14 },
-            { id: 'sniper', w: 12 },
-            { id: 'raygun', w: 13 },
+            { id: 'ak47', w: 18 },
+            { id: 'g95', w: 17 },
+            { id: 'hk33', w: 17 },
+            { id: 'raygun', w: 16 },
+            { id: 'scar', w: 15 },
+            { id: 'm249', w: 14 },
+            { id: 'spas12', w: 14 },
+            { id: 'm4', w: 12 },
+            { id: 'sniper', w: 11 },
             { id: 'wunderwaffe', w: 11 }
           ];
           const totalW = highTierPool.reduce((acc, it) => acc + it.w, 0);
           let r = Math.random() * totalW;
-          let chosenKey = 'scar';
+          let chosenKey = 'ak47';
           for (const it of highTierPool) {
             r -= it.w;
             if (r <= 0) { chosenKey = it.id; break; }
@@ -13717,7 +13941,7 @@
           mb.awardedWeapon = { ...WEAPONS[chosenKey], upgradeTier: luckyMk1 };
         }
 
-        const previewKeys = ['scar', 'm249', 'spas12', 'raygun', 'wunderwaffe', 'sniper', 'm4'];
+        const previewKeys = ['ak47', 'g95', 'hk33', 'raygun', 'scar', 'm249', 'spas12', 'wunderwaffe', 'sniper', 'm4'];
         const firstKey = previewKeys[Math.floor(Math.random() * previewKeys.length)];
         if (mb.floatingMesh) this.scene.remove(mb.floatingMesh);
         mb.floatingMesh = buildWeaponModel(firstKey);
@@ -13741,9 +13965,13 @@
         mb.pendingRoll = null;
         mb.lidPivot.rotation.x = 0;
         mb.state = 'IDLE';
+        mb.light.color.setHex(0x06b6d4);
         if (mb.skyBeamMat) {
           mb.skyBeamMat.color.setHex(0x38bdf8);
           mb.skyBeamMat.opacity = 0.2;
+        }
+        if (typeof triggerMysteryBoxGlbRoll === 'function') {
+          triggerMysteryBoxGlbRoll(false, 0);
         }
 
         this.updateHUD();
@@ -16247,7 +16475,7 @@
           mb.cycleTicker = (mb.cycleTicker || 0) + dt;
           if (mb.cycleTicker >= 0.14 && mb.timer > 0.18) {
             mb.cycleTicker = 0;
-            const cyclePool = ['scar', 'm249', 'spas12', 'raygun', 'wunderwaffe', 'sniper', 'm4'];
+            const cyclePool = ['ak47', 'g95', 'hk33', 'raygun', 'scar', 'm249', 'spas12', 'wunderwaffe', 'sniper', 'm4'];
             const nextKey = cyclePool[Math.floor(Math.random() * cyclePool.length)];
             if (mb.floatingMesh) this.scene.remove(mb.floatingMesh);
             mb.floatingMesh = buildWeaponModel(nextKey);
@@ -16269,6 +16497,9 @@
                 mb.skyBeamMat.opacity = 0.38;
               }
               mb.lidPivot.rotation.x = 0;
+              if (typeof triggerMysteryBoxGlbRoll === 'function') {
+                triggerMysteryBoxGlbRoll(false, 0);
+              }
               if (mb.floatingMesh) {
                 this.scene.remove(mb.floatingMesh);
                 mb.floatingMesh = null;
@@ -16286,7 +16517,7 @@
               mb.floatingMesh.position.set(mb.pos.x, mb.pos.y + 0.22, mb.pos.z);
               this.scene.add(mb.floatingMesh);
               mb.state = 'READY';
-              mb.light.color.setHex(mb.awardedWeapon.upgradeTier > 0 ? 0xfacc15 : 0x22c55e);
+              mb.light.color.setHex(0xfacc15);
               if (mb.skyBeamMat) {
                 mb.skyBeamMat.color.setHex(mb.awardedWeapon.upgradeTier > 0 ? 0xfacc15 : 0x22c55e);
                 mb.skyBeamMat.opacity = 0.34;
@@ -16295,6 +16526,9 @@
             } else {
               mb.state = 'IDLE';
               mb.lidPivot.rotation.x = 0;
+              if (typeof triggerMysteryBoxGlbRoll === 'function') {
+                triggerMysteryBoxGlbRoll(false, 0);
+              }
             }
           }
         } else if (mb && mb.state === 'READY' && mb.floatingMesh) {
@@ -17113,11 +17347,301 @@
     }
 
     // ============================================================================
-    // === [SEC-16] CALL OF DUTY WEAPON REALISM, ADS IRON SIGHTS & RECOIL POLISH ===
+    // === [SEC-16] GITHUB GLB ASSET LOADERS, DRACO & BOX3 NORMALIZATION ===
+    // === ASSET LOADERS ===
+    // ============================================================================
+    const DRACO_DECODER_URL = 'https://www.gstatic.com/draco/versioned/decoders/1.5.7/';
+    const GITHUB_ASSET_BASE = 'https://raw.githubusercontent.com/frankiegluisi-cyber/Game-Graphic-Files/main/';
+
+    // Properly URL-encoded GitHub raw URLs (%20, %28, %29) + local / secondary fallbacks
+    const ASSET_URLS = {
+      ww2Environment: [
+        GITHUB_ASSET_BASE + 'ww2_zombies_environment%20%281%29.glb',
+        '/ww2_zombies_environment%20(1).glb',
+        '/ww2_zombies_environment (1).glb'
+      ],
+      mysteryBox: [
+        GITHUB_ASSET_BASE + '11_mystery_box_-_3december2019%20%281%29.glb',
+        '/11_mystery_box_-_3december2019%20(1).glb',
+        '/11_mystery_box_-_3december2019 (1).glb'
+      ],
+      raygun: [
+        GITHUB_ASSET_BASE + 'cod_zombies_-_raygun%20%281%29.glb',
+        '/cod_zombies_-_raygun%20(1).glb',
+        GITHUB_ASSET_BASE + 'ray_gun_-_call_of_duty%20%281%29.glb',
+        'https://raw.githubusercontent.com/frankiegluisi-cyber/Yay/main/Ray_gun_-_call_of_duty%20(1).glb'
+      ],
+      ak47: [
+        GITHUB_ASSET_BASE + 'ak_post_apocalyptic%20%281%29.glb',
+        '/ak_post_apocalyptic%20(1).glb',
+        '/ak_post_apocalyptic (1).glb'
+      ],
+      g95: [
+        GITHUB_ASSET_BASE + 'low-poly_g95_a1%20%281%29.glb',
+        '/low-poly_g95_a1%20(1).glb',
+        '/low-poly_g95_a1 (1).glb'
+      ],
+      hk33: [
+        GITHUB_ASSET_BASE + 'low-poly_hk33%20%281%29.glb',
+        '/low-poly_hk33%20(1).glb',
+        '/low-poly_hk33 (1).glb'
+      ],
+      zombiePack: [
+        GITHUB_ASSET_BASE + 'polyart_zombies_with_animations_free_pack%20%281%29.glb',
+        'https://raw.githubusercontent.com/frankiegluisi-cyber/Yay/main/polyart_zombies_with_animations_free_pack%20(1).glb',
+        '/polyart_zombies_with_animations_free_pack%20(1).glb'
+      ]
+    };
+
+    // Runtime inspection report of loaded GLB models & detected animation clips
+    window.__outbreakAssetReport = {
+      loadedModels: {},
+      detectedClips: {}
+    };
+
+    const phase2DracoLoader = new THREE.DRACOLoader();
+    phase2DracoLoader.setDecoderPath(DRACO_DECODER_URL);
+
+    const phase2GltfLoader = new THREE.GLTFLoader();
+    phase2GltfLoader.setDRACOLoader(phase2DracoLoader);
+
+    // Enable EXT_texture_webp and KHR_materials_specular in Three.js r128 GLTFLoader
+    if (typeof phase2GltfLoader.register === 'function') {
+      phase2GltfLoader.register(function(parser) {
+        if (parser && parser.json && Array.isArray(parser.json.textures)) {
+          for (let i = 0; i < parser.json.textures.length; i++) {
+            const t = parser.json.textures[i];
+            if (t && t.extensions && t.extensions.EXT_texture_webp && t.source === undefined) {
+              t.source = t.extensions.EXT_texture_webp.source;
+            }
+          }
+        }
+        return { name: 'EXT_texture_webp' };
+      });
+      phase2GltfLoader.register(function() {
+        return { name: 'KHR_materials_specular' };
+      });
+    }
+
+    function loadGlbWithUrlChain(urlList, onSuccess, onError, idx = 0) {
+      if (!Array.isArray(urlList) || idx >= urlList.length) {
+        if (typeof onError === 'function') onError(new Error('All candidate URLs failed'));
+        return;
+      }
+      const candidateUrl = urlList[idx];
+      if (!candidateUrl) {
+        loadGlbWithUrlChain(urlList, onSuccess, onError, idx + 1);
+        return;
+      }
+      phase2GltfLoader.load(
+        candidateUrl,
+        (gltf) => {
+          if (gltf && gltf.scene && typeof onSuccess === 'function') {
+            onSuccess(gltf, candidateUrl);
+          } else {
+            loadGlbWithUrlChain(urlList, onSuccess, onError, idx + 1);
+          }
+        },
+        undefined,
+        () => {
+          loadGlbWithUrlChain(urlList, onSuccess, onError, idx + 1);
+        }
+      );
+    }
+
+    // Wrap ANY loaded .glb model in a normalized THREE.Group container using THREE.Box3().setFromObject()
+    // to center its pivot (or align min.y = 0 for floor/station models) and scale uniformly to exact world units.
+    function normalizeGlbInContainer(rootObj, targetMaxDim, options = {}) {
+      const container = new THREE.Group();
+      container.name = options.name || 'NormalizedGlbContainer';
+      if (!rootObj) return container;
+
+      // Optional pre-filter to hide detached showcase display props before computing Box3
+      if (options.hideNodeRegex) {
+        const toRemove = [];
+        rootObj.traverse((node) => {
+          if (node && node.name && options.hideNodeRegex.test(node.name)) {
+            node.visible = false;
+            toRemove.push(node);
+          }
+        });
+        for (let i = 0; i < toRemove.length; i++) {
+          if (toRemove[i].parent) toRemove[i].parent.remove(toRemove[i]);
+        }
+      }
+
+      rootObj.position.set(0, 0, 0);
+      rootObj.rotation.set(0, 0, 0);
+      rootObj.scale.set(1, 1, 1);
+      rootObj.updateMatrixWorld(true);
+
+      const rawBox = new THREE.Box3().setFromObject(rootObj);
+      const rawSize = new THREE.Vector3();
+      rawBox.getSize(rawSize);
+      const maxDim = Math.max(rawSize.x, rawSize.y, rawSize.z, 0.0001);
+      const uniformScale = (targetMaxDim || 1.0) / maxDim;
+
+      rootObj.scale.setScalar(uniformScale);
+      if (options.rotY) rootObj.rotation.y = options.rotY;
+      if (options.rotX) rootObj.rotation.x = options.rotX;
+      if (options.rotZ) rootObj.rotation.z = options.rotZ;
+      rootObj.updateMatrixWorld(true);
+
+      const scaledBox = new THREE.Box3().setFromObject(rootObj);
+      const scaledCenter = new THREE.Vector3();
+      scaledBox.getCenter(scaledCenter);
+
+      rootObj.position.x -= scaledCenter.x;
+      rootObj.position.z -= scaledCenter.z;
+      if (options.alignFloorY) {
+        rootObj.position.y -= scaledBox.min.y;
+      } else {
+        rootObj.position.y -= scaledCenter.y;
+      }
+      rootObj.updateMatrixWorld(true);
+
+      container.add(rootObj);
+      return container;
+    }
+
+    // Integrate ww2_zombies_environment (1).glb into the outdoor courtyard/perimeter aligned to floor y = 0
+    let ww2EnvironmentGroup = null;
+    function setupWW2EnvironmentGlb(gltf) {
+      if (!gltf || !gltf.scene) return;
+      const ge = window.gameEngine;
+      if (!ge || !ge.scene) return;
+
+      runWithErrorBoundary('setupWW2EnvironmentGlb', () => {
+        if (ww2EnvironmentGroup && ww2EnvironmentGroup.parent) {
+          ww2EnvironmentGroup.parent.remove(ww2EnvironmentGroup);
+        }
+
+        const envRoot = gltf.scene;
+        const nodesToStrip = [];
+        envRoot.traverse((child) => {
+          if (!child) return;
+          // Strip embedded Blender Spot/Point lights and cameras so scene lighting stays balanced
+          if (child.isLight || child.isCamera || /^(Spot|Point|Camera)/i.test(child.name || '')) {
+            nodesToStrip.push(child);
+            return;
+          }
+          if (child.isMesh) {
+            child.castShadow = true;
+            child.receiveShadow = true;
+            if (child.material) {
+              const mats = Array.isArray(child.material) ? child.material : [child.material];
+              for (let i = 0; i < mats.length; i++) {
+                if (mats[i]) {
+                  mats[i].roughness = Math.max(0.55, mats[i].roughness !== undefined ? mats[i].roughness : 0.78);
+                  mats[i].metalness = Math.min(0.45, mats[i].metalness !== undefined ? mats[i].metalness : 0.15);
+                  mats[i].needsUpdate = true;
+                }
+              }
+            }
+          }
+        });
+        for (let i = 0; i < nodesToStrip.length; i++) {
+          if (nodesToStrip[i].parent) nodesToStrip[i].parent.remove(nodesToStrip[i]);
+        }
+
+        // Normalize into a THREE.Group container (~28m span) aligned cleanly to floor y = 0 in the Courtyard perimeter
+        ww2EnvironmentGroup = normalizeGlbInContainer(envRoot, 28.0, {
+          name: 'WW2ZombiesEnvironmentContainer',
+          alignFloorY: true
+        });
+        ww2EnvironmentGroup.position.set(0, 0.005, 42.5);
+        ge.scene.add(ww2EnvironmentGroup);
+
+        const clips = Array.isArray(gltf.animations) ? gltf.animations.map((c) => c.name) : [];
+        window.__outbreakAssetReport.loadedModels.ww2Environment = true;
+        window.__outbreakAssetReport.detectedClips.ww2Environment = clips;
+      });
+    }
+
+    let _phase2AssetsInitialized = false;
+    function initPhase2Assets(camera) {
+      if (_phase2AssetsInitialized) return;
+      _phase2AssetsInitialized = true;
+
+      // 1. Load Multi-Rig Zombie Pack GLB
+      loadGlbWithUrlChain(
+        ASSET_URLS.zombiePack,
+        (gltf) => setupZombiePackTemplates(gltf),
+        (err) => console.warn('[Asset Loader] Zombie Pack GLB fallback warning:', err)
+      );
+
+      // 2. Load CoD Zombies Ray Gun GLB (cod_zombies_-_raygun (1).glb)
+      loadGlbWithUrlChain(
+        ASSET_URLS.raygun,
+        (gltf) => setupWeaponGlbViewmodel('raygun', gltf, camera, {
+          targetLength: 0.45,
+          rotY: 0,
+          hipOffset: new THREE.Vector3(0.24, -0.22, -0.45),
+          adsOffset: new THREE.Vector3(0.0, -0.15, -0.30)
+        }),
+        (err) => console.warn('[Asset Loader] Ray Gun GLB fallback warning:', err)
+      );
+
+      // 3. Load AK-47 Post-Apocalyptic GLB (ak_post_apocalyptic (1).glb)
+      loadGlbWithUrlChain(
+        ASSET_URLS.ak47,
+        (gltf) => setupWeaponGlbViewmodel('ak47', gltf, camera, {
+          targetLength: 0.62,
+          rotY: 0,
+          hipOffset: new THREE.Vector3(0.24, -0.22, -0.46),
+          adsOffset: new THREE.Vector3(0.0, -0.145, -0.32)
+        }),
+        (err) => console.warn('[Asset Loader] AK-47 GLB fallback warning:', err)
+      );
+
+      // 4. Load Low-Poly G95 A1 GLB (low-poly_g95_a1 (1).glb)
+      loadGlbWithUrlChain(
+        ASSET_URLS.g95,
+        (gltf) => setupWeaponGlbViewmodel('g95', gltf, camera, {
+          targetLength: 0.60,
+          rotY: -Math.PI / 2,
+          hideNodeRegex: /55645|mag empty/i,
+          hipOffset: new THREE.Vector3(0.24, -0.22, -0.46),
+          adsOffset: new THREE.Vector3(0.0, -0.145, -0.31)
+        }),
+        (err) => console.warn('[Asset Loader] G95 A1 GLB fallback warning:', err)
+      );
+
+      // 5. Load Low-Poly HK33 GLB (low-poly_hk33 (1).glb)
+      loadGlbWithUrlChain(
+        ASSET_URLS.hk33,
+        (gltf) => setupWeaponGlbViewmodel('hk33', gltf, camera, {
+          targetLength: 0.60,
+          rotY: -Math.PI / 2,
+          hideNodeRegex: /55645|hk33 30rnd mag_15/i,
+          hipOffset: new THREE.Vector3(0.24, -0.22, -0.46),
+          adsOffset: new THREE.Vector3(0.0, -0.145, -0.31)
+        }),
+        (err) => console.warn('[Asset Loader] HK33 GLB fallback warning:', err)
+      );
+
+      // 6. Load Mystery Box GLB (11_mystery_box_-_3december2019 (1).glb)
+      loadGlbWithUrlChain(
+        ASSET_URLS.mysteryBox,
+        (gltf) => setupMysteryBoxGlb(gltf),
+        (err) => console.warn('[Asset Loader] Mystery Box GLB fallback warning:', err)
+      );
+
+      // 7. Load WW2 Zombies Environment GLB (ww2_zombies_environment (1).glb)
+      loadGlbWithUrlChain(
+        ASSET_URLS.ww2Environment,
+        (gltf) => setupWW2EnvironmentGlb(gltf),
+        (err) => console.warn('[Asset Loader] WW2 Environment GLB fallback warning:', err)
+      );
+    }
+
+    // ============================================================================
+    // === [SEC-16B] CALL OF DUTY WEAPON VIEWMODELS, ARSENAL & MYSTERY BOX GLB ===
+    // === WEAPON & MYSTERY BOX ===
     // === GUNFIRE & ADS SYSTEM ===
     // ============================================================================
     const COD_VIEWMODEL_CONFIG = {
-      normalizedLength: 0.45,              // Uniformly normalized handheld weapon length (~0.45 units)
+      normalizedLength: 0.45,              // Uniformly normalized handheld Ray Gun length (~0.45 units)
       cameraNearPlane: 0.05,               // Prevents near-plane clipping during ADS & recoil
       hipFov: 75,                          // Standard first-person hipfire FOV
       adsFov: 50,                          // Narrowed Aim Down Sights (ADS) FOV
@@ -17138,6 +17662,10 @@
     let rayGunShootAction = null;
     let rayGunMuzzleLight = null;
     const rayGunEmissiveCoreMats = [];
+
+    // Multi-weapon GLB registry: { [weaponId]: { container, previewTemplate, mixer, fireAction, reloadAction, hipOffset, adsOffset, emissiveMats } }
+    const loadedWeaponGlbRegistry = {};
+
     const _barrelSmokeParticles = [];
     const _barrelSmokeGeo = new THREE.SphereGeometry(0.022, 6, 6);
     const _barrelSmokeMat = new THREE.MeshBasicMaterial({
@@ -17153,6 +17681,8 @@
       recoilZ: 0,
       recoilPitch: 0,
       recoilRoll: 0,
+      reloadPitch: 0,
+      reloadRoll: 0,
       swayX: 0,
       swayY: 0,
       targetSwayX: 0,
@@ -17165,29 +17695,45 @@
     const _muzzleWorldPos = new THREE.Vector3();
     window.rayGunViewmodelActive = false;
 
-    function setupRayGunViewmodel(gltf, camera) {
-      if (!gltf || !gltf.scene) return;
+    function ensureMasterGlbViewmodelSlot(camera) {
       const ge = window.gameEngine;
       const targetCam = camera || (ge && ge.camera);
-      if (!targetCam) return;
+      if (!targetCam) return null;
 
-      runWithErrorBoundary('setupRayGunViewmodel', () => {
-        // Prevent near-plane clipping of first-person weapon barrel and sights
-        targetCam.near = COD_VIEWMODEL_CONFIG.cameraNearPlane;
-        targetCam.fov = COD_VIEWMODEL_CONFIG.hipFov;
-        targetCam.updateProjectionMatrix();
+      targetCam.near = COD_VIEWMODEL_CONFIG.cameraNearPlane;
+      targetCam.updateProjectionMatrix();
 
-        // Remove any previous viewmodel instance safely before attaching
-        if (rayGunViewmodelSlot && rayGunViewmodelSlot.parent) {
-          rayGunViewmodelSlot.parent.remove(rayGunViewmodelSlot);
+      if (!rayGunViewmodelSlot) {
+        rayGunViewmodelSlot = new THREE.Group();
+        rayGunViewmodelSlot.name = 'CodMasterGlbViewmodelSlot';
+        rayGunViewmodelSlot.position.copy(COD_VIEWMODEL_CONFIG.hipOffset);
+        rayGunViewmodelSlot.rotation.set(0, Math.PI, 0);
+
+        rayGunMuzzleLight = new THREE.PointLight(0x38bdf8, 0, 8.5, 1.5);
+        rayGunMuzzleLight.position.set(0, 0.04, 0.28);
+        rayGunViewmodelSlot.add(rayGunMuzzleLight);
+
+        targetCam.add(rayGunViewmodelSlot);
+      } else if (rayGunViewmodelSlot.parent !== targetCam) {
+        targetCam.add(rayGunViewmodelSlot);
+      }
+      return rayGunViewmodelSlot;
+    }
+
+    function setupWeaponGlbViewmodel(weaponId, gltf, camera, cfg = {}) {
+      if (!weaponId || !gltf || !gltf.scene) return;
+      runWithErrorBoundary(`setupWeaponGlbViewmodel:${weaponId}`, () => {
+        const slot = ensureMasterGlbViewmodelSlot(camera);
+        if (!slot) return;
+
+        if (loadedWeaponGlbRegistry[weaponId] && loadedWeaponGlbRegistry[weaponId].container) {
+          slot.remove(loadedWeaponGlbRegistry[weaponId].container);
         }
-        rayGunEmissiveCoreMats.length = 0;
 
-        const rayGunModel = gltf.scene;
-        rayGunModelRoot = rayGunModel;
+        const rawScene = gltf.scene;
+        const emissiveMats = [];
 
-        // Enhance PBR Shading, Smooth Normals & Vibrant Emissive Energy Core
-        rayGunModel.traverse((child) => {
+        rawScene.traverse((child) => {
           if (!child || !child.isMesh) return;
           child.castShadow = false;
           child.receiveShadow = true;
@@ -17204,25 +17750,25 @@
             mat.flatShading = false;
 
             if ('metalness' in mat) {
-              mat.metalness = Math.min(0.65, Math.max(0.25, mat.metalness !== undefined ? mat.metalness : 0.45));
+              mat.metalness = Math.min(0.72, Math.max(0.22, mat.metalness !== undefined ? mat.metalness : 0.45));
             }
             if ('roughness' in mat) {
-              mat.roughness = Math.min(0.45, Math.max(0.22, mat.roughness !== undefined ? mat.roughness : 0.32));
+              mat.roughness = Math.min(0.55, Math.max(0.20, mat.roughness !== undefined ? mat.roughness : 0.34));
             }
 
-            // Detect energy core, plasma coils, sight reticle, or emissive maps for vibrant Call of Duty glow
             const meshName = ((child.name || '') + ' ' + (mat.name || '')).toLowerCase();
             const hasEmissive = Boolean(
               mat.emissiveMap ||
               (mat.emissive && (mat.emissive.r > 0.05 || mat.emissive.g > 0.05 || mat.emissive.b > 0.05)) ||
-              /core|plasma|glow|neon|energy|glass|tube|coil|ring|sight|bulb|atom/i.test(meshName)
+              (weaponId === 'raygun' && /core|plasma|glow|neon|energy|glass|tube|coil|ring|sight|bulb|atom|sphere_2/i.test(meshName))
             );
             if (hasEmissive && mat.emissive) {
               if (!mat.emissiveMap && mat.emissive.getHex() === 0x000000) {
                 mat.emissive.setHex(0x22d3ee);
               }
               mat.emissiveIntensity = 1.85;
-              if (!rayGunEmissiveCoreMats.includes(mat)) {
+              if (!emissiveMats.includes(mat)) emissiveMats.push(mat);
+              if (weaponId === 'raygun' && !rayGunEmissiveCoreMats.includes(mat)) {
                 rayGunEmissiveCoreMats.push(mat);
               }
             }
@@ -17230,109 +17776,308 @@
           }
         });
 
-        // 1. Compute bounding box (THREE.Box3), scale uniformly to ~0.45 units long, and center pivot
-        rayGunModel.position.set(0, 0, 0);
-        rayGunModel.rotation.set(0, 0, 0);
-        rayGunModel.scale.set(1, 1, 1);
-        rayGunModel.updateMatrixWorld(true);
+        const targetLen = cfg.targetLength || (weaponId === 'raygun' ? 0.45 : 0.60);
+        const normalizedContainer = normalizeGlbInContainer(rawScene, targetLen, {
+          name: `Viewmodel_${weaponId}`,
+          rotY: cfg.rotY || 0,
+          hideNodeRegex: cfg.hideNodeRegex || null
+        });
 
-        const rawBox = new THREE.Box3().setFromObject(rayGunModel);
-        const rawSize = new THREE.Vector3();
-        rawBox.getSize(rawSize);
-        const maxDimension = Math.max(rawSize.x, rawSize.y, rawSize.z, 0.001);
-        const uniformScale = COD_VIEWMODEL_CONFIG.normalizedLength / maxDimension;
-        rayGunModel.scale.setScalar(uniformScale);
-        rayGunModel.updateMatrixWorld(true);
+        // Clone a lightweight 3rd-person preview template for Mystery Box / Wall-Buy / Pack-a-Punch
+        const previewTemplate = normalizedContainer.clone(true);
 
-        const scaledBox = new THREE.Box3().setFromObject(rayGunModel);
-        const scaledCenter = new THREE.Vector3();
-        scaledBox.getCenter(scaledCenter);
-        rayGunModel.position.sub(scaledCenter);
+        slot.add(normalizedContainer);
 
-        // 2. Parent normalized model to camera at first-person hipfire offset (x: 0.24, y: -0.22, z: -0.45)
-        rayGunViewmodelSlot = new THREE.Group();
-        rayGunViewmodelSlot.name = 'RayGunViewmodelSlot';
-        rayGunViewmodelSlot.position.copy(COD_VIEWMODEL_CONFIG.hipOffset);
-        rayGunViewmodelSlot.rotation.set(0, Math.PI, 0);
-        rayGunViewmodelSlot.add(rayGunModel);
+        const animations = Array.isArray(gltf.animations) ? gltf.animations : [];
+        const clipNames = animations.map((c) => c.name);
+        window.__outbreakAssetReport.loadedModels[weaponId] = true;
+        window.__outbreakAssetReport.detectedClips[weaponId] = clipNames;
 
-        // 3. Dedicated Muzzle Flash PointLight at the barrel tip
-        rayGunMuzzleLight = new THREE.PointLight(0x38bdf8, 0, 8.5, 1.5);
-        rayGunMuzzleLight.position.set(0, 0.04, 0.24);
-        rayGunViewmodelSlot.add(rayGunMuzzleLight);
+        let mixer = null;
+        let fireAction = null;
+        let reloadAction = null;
 
-        targetCam.add(rayGunViewmodelSlot);
-        window.rayGunViewmodelActive = true;
-        const isHoldingRayGunInit = Boolean(ge && ge.activeWeapon && ge.activeWeapon.id === 'raygun');
-        rayGunViewmodelSlot.visible = isHoldingRayGunInit;
+        if (animations.length > 0) {
+          mixer = new THREE.AnimationMixer(normalizedContainer);
+          const primaryClip =
+            THREE.AnimationClip.findByName(animations, "Shoot 'n' Reload") ||
+            animations.find((c) => /shoot|fire|attack/i.test(c.name || '')) ||
+            animations[0];
+          const reloadClip =
+            animations.find((c) => /reload/i.test(c.name || '')) ||
+            primaryClip;
 
-        if (ge && ge.currentModelMesh && isHoldingRayGunInit) {
-          ge.currentModelMesh.visible = false;
+          if (primaryClip) {
+            fireAction = mixer.clipAction(primaryClip);
+            fireAction.setLoop(THREE.LoopOnce, 1);
+            fireAction.clampWhenFinished = true;
+          }
+          if (reloadClip) {
+            reloadAction = mixer.clipAction(reloadClip);
+            reloadAction.setLoop(THREE.LoopOnce, 1);
+            reloadAction.clampWhenFinished = true;
+          }
         }
 
-        // 4. Bind "Shoot 'n' Reload" skeletal animation clip
-        const animations = Array.isArray(gltf.animations) ? gltf.animations : [];
-        const shootClip =
-          THREE.AnimationClip.findByName(animations, "Shoot 'n' Reload") ||
-          animations[0] ||
-          null;
+        if (weaponId === 'raygun') {
+          rayGunModelRoot = normalizedContainer;
+          rayGunMixer = mixer;
+          rayGunShootAction = fireAction;
+          window.rayGunViewmodelActive = true;
+        }
 
-        if (shootClip) {
-          if (rayGunMixer) {
-            rayGunMixer.stopAllAction();
-          }
-          rayGunMixer = new THREE.AnimationMixer(rayGunModel);
-          rayGunShootAction = rayGunMixer.clipAction(shootClip);
-          rayGunShootAction.setLoop(THREE.LoopOnce, 1);
-          rayGunShootAction.clampWhenFinished = true;
+        loadedWeaponGlbRegistry[weaponId] = {
+          weaponId,
+          container: normalizedContainer,
+          previewTemplate,
+          mixer,
+          fireAction,
+          reloadAction,
+          hipOffset: cfg.hipOffset || COD_VIEWMODEL_CONFIG.hipOffset,
+          adsOffset: cfg.adsOffset || COD_VIEWMODEL_CONFIG.adsOffset,
+          emissiveMats
+        };
+
+        const ge = window.gameEngine;
+        if (ge && ge.activeWeapon) {
+          syncActiveGlbViewmodelVisibility(ge.activeWeapon.id, ge.activeWeapon.isPap);
         }
       });
     }
 
-    function triggerRayGunFireAnimation() {
+    // Legacy compatibility alias
+    function setupRayGunViewmodel(gltf, camera) {
+      setupWeaponGlbViewmodel('raygun', gltf, camera, {
+        targetLength: COD_VIEWMODEL_CONFIG.normalizedLength,
+        rotY: 0,
+        hipOffset: COD_VIEWMODEL_CONFIG.hipOffset,
+        adsOffset: COD_VIEWMODEL_CONFIG.adsOffset
+      });
+    }
+
+    // Return a normalized clone for Mystery Box floating previews
+    window.__cloneLoadedWeaponPreview = function(weaponId, isPap = false) {
+      const entry = loadedWeaponGlbRegistry[weaponId];
+      if (!entry || !entry.previewTemplate) return null;
+      const clone = entry.previewTemplate.clone(true);
+      clone.scale.setScalar(1.15);
+      if (isPap) {
+        clone.traverse((node) => {
+          if (node && node.isMesh && node.material) {
+            const mats = Array.isArray(node.material) ? node.material : [node.material];
+            node.material = mats.map((m) => {
+              if (!m) return m;
+              const cm = m.clone();
+              if (cm.emissive) {
+                cm.emissive.setHex(0xa855f7);
+                cm.emissiveIntensity = 0.75;
+              }
+              return cm;
+            });
+            if (!Array.isArray(node.material) && node.material.length === 1) {
+              node.material = node.material[0];
+            }
+          }
+        });
+      }
+      return clone;
+    };
+
+    function syncActiveGlbViewmodelVisibility(activeWeaponId, isPap = false) {
       const ge = window.gameEngine;
-      const isHoldingRayGun = Boolean(ge && ge.activeWeapon && ge.activeWeapon.id === 'raygun');
-      if (ge && ge.currentModelMesh && window.rayGunViewmodelActive && isHoldingRayGun) {
+      const hasGlb = Boolean(loadedWeaponGlbRegistry[activeWeaponId]);
+
+      if (rayGunViewmodelSlot) {
+        rayGunViewmodelSlot.visible = hasGlb;
+      }
+
+      const ids = Object.keys(loadedWeaponGlbRegistry);
+      for (let i = 0; i < ids.length; i++) {
+        const id = ids[i];
+        const entry = loadedWeaponGlbRegistry[id];
+        if (!entry || !entry.container) continue;
+        entry.container.visible = (id === activeWeaponId);
+      }
+
+      if (ge && ge.currentModelMesh) {
+        ge.currentModelMesh.visible = !hasGlb;
+      }
+    }
+    window.syncActiveGlbViewmodelVisibility = syncActiveGlbViewmodelVisibility;
+
+    function triggerActiveGlbWeaponFire(weaponId) {
+      const ge = window.gameEngine;
+      const wid = weaponId || (ge && ge.activeWeapon && ge.activeWeapon.id) || '';
+      const entry = loadedWeaponGlbRegistry[wid];
+
+      if (entry && ge && ge.currentModelMesh) {
         ge.currentModelMesh.visible = false;
       }
 
-      // Physical viewmodel recoil impulse (dampened by 50% when Aiming Down Sights)
       const adsDamp = codViewmodelState.isADS ? 0.48 : 1.0;
-      codViewmodelState.recoilZ = Math.min(0.09, codViewmodelState.recoilZ + COD_VIEWMODEL_CONFIG.recoilKickZ * adsDamp);
-      codViewmodelState.recoilPitch = Math.min(0.18, codViewmodelState.recoilPitch + COD_VIEWMODEL_CONFIG.recoilKickPitch * adsDamp);
-      codViewmodelState.recoilRoll = (Math.random() - 0.5) * 0.035 * adsDamp;
+      const kickZ = (ge && ge.activeWeapon && ge.activeWeapon.recoilZ) || COD_VIEWMODEL_CONFIG.recoilKickZ;
+      const kickPitch = (ge && ge.activeWeapon && ge.activeWeapon.recoilPitch) || COD_VIEWMODEL_CONFIG.recoilKickPitch;
+      codViewmodelState.recoilZ = Math.min(0.11, codViewmodelState.recoilZ + kickZ * 0.85 * adsDamp);
+      codViewmodelState.recoilPitch = Math.min(0.20, codViewmodelState.recoilPitch + kickPitch * 0.9 * adsDamp);
+      codViewmodelState.recoilRoll = (Math.random() - 0.5) * 0.038 * adsDamp;
       codViewmodelState.muzzleFlashTimer = 0.065;
 
-      if (rayGunMuzzleLight && isHoldingRayGun) {
+      if (rayGunMuzzleLight && entry) {
         const isPap = Boolean(ge && ge.activeWeapon && ge.activeWeapon.isPap);
-        rayGunMuzzleLight.color.setHex(isPap ? 0xef4444 : 0x38bdf8);
+        if (wid === 'raygun') {
+          rayGunMuzzleLight.color.setHex(isPap ? 0xef4444 : 0x38bdf8);
+        } else {
+          rayGunMuzzleLight.color.setHex(isPap ? 0xc084fc : 0xfbbf24);
+        }
         rayGunMuzzleLight.intensity = 6.5;
       }
 
       spawnBarrelSmokePuff();
 
-      if (rayGunShootAction && isHoldingRayGun) {
-        rayGunShootAction.reset();
-        rayGunShootAction.timeScale = 1.65;
-        rayGunShootAction.play();
+      if (entry && entry.fireAction) {
+        entry.fireAction.reset();
+        entry.fireAction.timeScale = 1.65;
+        entry.fireAction.play();
       }
     }
+    window.triggerActiveGlbWeaponFire = triggerActiveGlbWeaponFire;
+
+    function triggerRayGunFireAnimation() {
+      triggerActiveGlbWeaponFire();
+    }
+
+    function triggerActiveGlbWeaponReload(reloadDurationSec = 2.2) {
+      const ge = window.gameEngine;
+      const wid = (ge && ge.activeWeapon && ge.activeWeapon.id) || '';
+      const entry = loadedWeaponGlbRegistry[wid];
+      if (!entry) return;
+
+      if (entry.reloadAction) {
+        const clipDur = (entry.reloadAction.getClip() && entry.reloadAction.getClip().duration) || 2.2;
+        entry.reloadAction.reset();
+        entry.reloadAction.timeScale = Math.max(0.8, clipDur / Math.max(0.5, reloadDurationSec));
+        entry.reloadAction.play();
+      }
+    }
+    window.triggerActiveGlbWeaponReload = triggerActiveGlbWeaponReload;
 
     function triggerRayGunReloadAnimation(reloadDurationSec = 2.2) {
-      const ge = window.gameEngine;
-      if (!rayGunShootAction || !(ge && ge.activeWeapon && ge.activeWeapon.id === 'raygun')) return;
-      const clipDur = (rayGunShootAction.getClip() && rayGunShootAction.getClip().duration) || 5.625;
-      rayGunShootAction.reset();
-      rayGunShootAction.timeScale = Math.max(0.8, clipDur / Math.max(0.5, reloadDurationSec));
-      rayGunShootAction.play();
+      triggerActiveGlbWeaponReload(reloadDurationSec);
     }
+
+    // Mystery Box GLB (11_mystery_box_-_3december2019 (1).glb) with embedded "Cod-Zombie" AnimationClip
+    let mysteryBoxGlbMixer = null;
+    let mysteryBoxGlbAction = null;
+    let mysteryBoxGlbContainer = null;
+
+    function setupMysteryBoxGlb(gltf) {
+      if (!gltf || !gltf.scene) return;
+      const ge = window.gameEngine;
+      if (!ge || !ge.mysteryBox || !ge.mysteryBox.group) return;
+
+      runWithErrorBoundary('setupMysteryBoxGlb', () => {
+        const mb = ge.mysteryBox;
+        if (mysteryBoxGlbContainer && mysteryBoxGlbContainer.parent) {
+          mysteryBoxGlbContainer.parent.remove(mysteryBoxGlbContainer);
+        }
+
+        const boxRoot = gltf.scene;
+        boxRoot.traverse((child) => {
+          if (child && child.isMesh) {
+            child.castShadow = true;
+            child.receiveShadow = true;
+            if (child.material) {
+              const mats = Array.isArray(child.material) ? child.material : [child.material];
+              for (let i = 0; i < mats.length; i++) {
+                if (mats[i]) {
+                  mats[i].roughness = 0.55;
+                  mats[i].metalness = 0.35;
+                  mats[i].needsUpdate = true;
+                }
+              }
+            }
+          }
+        });
+
+        // Normalize Mystery Box to ~1.88m width sitting on top of the courtyard dais (y = 0.40)
+        mysteryBoxGlbContainer = normalizeGlbInContainer(boxRoot, 1.88, {
+          name: 'MysteryBoxGlbContainer',
+          alignFloorY: true
+        });
+        mysteryBoxGlbContainer.position.set(0, 0.40, 0);
+
+        // Hide procedural chest box & lid meshes so the authentic 3D GLB Mystery Box is displayed
+        mb.group.children.forEach((child) => {
+          if (!child) return;
+          if (child === mb.lidPivot) {
+            child.visible = false;
+          } else if (child.isMesh && child !== mb.skyBeam && child.position.y > 0.35) {
+            child.visible = false;
+          }
+        });
+
+        mb.group.add(mysteryBoxGlbContainer);
+        mb.glbContainer = mysteryBoxGlbContainer;
+
+        const animations = Array.isArray(gltf.animations) ? gltf.animations : [];
+        const clipNames = animations.map((c) => c.name);
+        window.__outbreakAssetReport.loadedModels.mysteryBox = true;
+        window.__outbreakAssetReport.detectedClips.mysteryBox = clipNames;
+
+        const codZombieClip =
+          THREE.AnimationClip.findByName(animations, 'Cod-Zombie') ||
+          animations[0] ||
+          null;
+
+        if (codZombieClip) {
+          if (mysteryBoxGlbMixer) mysteryBoxGlbMixer.stopAllAction();
+          mysteryBoxGlbMixer = new THREE.AnimationMixer(mysteryBoxGlbContainer);
+          mysteryBoxGlbAction = mysteryBoxGlbMixer.clipAction(codZombieClip);
+          mysteryBoxGlbAction.setLoop(THREE.LoopOnce, 1);
+          mysteryBoxGlbAction.clampWhenFinished = true;
+          mb.glbMixer = mysteryBoxGlbMixer;
+          mb.glbAction = mysteryBoxGlbAction;
+        }
+      });
+    }
+
+    function triggerMysteryBoxGlbRoll(isRolling, rollDurationSec = 2.6) {
+      const ge = window.gameEngine;
+      const mb = ge ? ge.mysteryBox : null;
+      if (!mb) return;
+
+      if (isRolling) {
+        if (mb.light) mb.light.color.setHex(0xfacc15);
+        if (mysteryBoxGlbAction) {
+          const clipDur = (mysteryBoxGlbAction.getClip() && mysteryBoxGlbAction.getClip().duration) || 15.98;
+          mysteryBoxGlbAction.reset();
+          mysteryBoxGlbAction.paused = false;
+          // Scale clip so the lid opens and internal mystery cube rises smoothly during the roll window
+          mysteryBoxGlbAction.timeScale = Math.max(1.5, (clipDur * 0.42) / Math.max(0.8, rollDurationSec));
+          mysteryBoxGlbAction.play();
+        }
+      } else {
+        if (mysteryBoxGlbAction) {
+          mysteryBoxGlbAction.stop();
+          mysteryBoxGlbAction.reset();
+          if (mysteryBoxGlbMixer) mysteryBoxGlbMixer.update(0);
+        }
+      }
+    }
+    window.triggerMysteryBoxGlbRoll = triggerMysteryBoxGlbRoll;
+
+    function resetMysteryBoxGlbState() {
+      triggerMysteryBoxGlbRoll(false, 0);
+    }
+    window.resetMysteryBoxGlbState = resetMysteryBoxGlbState;
 
     function spawnBarrelSmokePuff() {
       const ge = window.gameEngine;
       if (!ge || !ge.scene || !ge.camera) return;
 
-      const isHoldingRayGun = Boolean(ge.activeWeapon && ge.activeWeapon.id === 'raygun');
-      if (rayGunMuzzleLight && rayGunViewmodelSlot && isHoldingRayGun) {
+      const wid = (ge.activeWeapon && ge.activeWeapon.id) || '';
+      const hasGlb = Boolean(loadedWeaponGlbRegistry[wid]);
+      if (rayGunMuzzleLight && rayGunViewmodelSlot && hasGlb) {
         rayGunMuzzleLight.getWorldPosition(_muzzleWorldPos);
       } else if (ge.muzzleSprite) {
         ge.muzzleSprite.getWorldPosition(_muzzleWorldPos);
@@ -17385,11 +18130,14 @@
       }
     }
 
-    // Update CoD ADS Iron Sights interpolation, FOV (75 -> 50), weapon sway, recoil recovery & emissive core pulse
+    // Update CoD ADS Iron Sights interpolation, FOV (75 -> 50), weapon sway, recoil/reload tilt & Mystery Box mixer
     function updateCoDViewmodelAndADS(delta) {
       const ge = window.gameEngine;
       const cam = ge ? ge.camera : null;
       if (!cam) return;
+
+      const wid = (ge && ge.activeWeapon && ge.activeWeapon.id) || '';
+      const activeGlbEntry = loadedWeaponGlbRegistry[wid] || null;
 
       // Sync ADS state from GameEngine or right-click hold using frame-rate independent exponential damping
       const isADSActive = Boolean((ge && ge.isADS) || codViewmodelState.isADS);
@@ -17401,7 +18149,7 @@
         posDamp
       );
 
-      // 1. Smoothly interpolate Camera FOV between Hipfire and per-weapon ADS FOV (plus Steady Focus zoom)
+      // 1. Smoothly interpolate Camera FOV between Hipfire and per-weapon ADS FOV
       const weaponAdsFov = (ge && ge.activeWeapon && ge.activeWeapon.adsFov) || COD_VIEWMODEL_CONFIG.adsFov;
       const steadyZoomBonus = (ge && ge.isSteadyBreath) ? 3.5 : 0;
       const baseHip = (ge && ge.baseHipFov) || COD_VIEWMODEL_CONFIG.hipFov;
@@ -17429,6 +18177,18 @@
       codViewmodelState.recoilPitch = THREE.MathUtils.lerp(codViewmodelState.recoilPitch, 0, recDecay);
       codViewmodelState.recoilRoll = THREE.MathUtils.lerp(codViewmodelState.recoilRoll, 0, recDecay);
 
+      // Tactical reload tilt animation for GLB weapons without embedded reload keyframes
+      let targetReloadPitch = 0;
+      let targetReloadRoll = 0;
+      if (ge && ge.isReloading && ge.reloadDuration > 0) {
+        const prog = 1.0 - (ge.reloadTimer / ge.reloadDuration);
+        const bell = Math.sin(Math.min(1, Math.max(0, prog)) * Math.PI);
+        targetReloadPitch = -0.36 * bell;
+        targetReloadRoll = 0.42 * bell;
+      }
+      codViewmodelState.reloadPitch = THREE.MathUtils.lerp(codViewmodelState.reloadPitch, targetReloadPitch, Math.min(1, delta * 14));
+      codViewmodelState.reloadRoll = THREE.MathUtils.lerp(codViewmodelState.reloadRoll, targetReloadRoll, Math.min(1, delta * 14));
+
       // 3. Muzzle flash point light decay
       if (codViewmodelState.muzzleFlashTimer > 0) {
         codViewmodelState.muzzleFlashTimer = Math.max(0, codViewmodelState.muzzleFlashTimer - delta);
@@ -17455,47 +18215,50 @@
         }
       }
 
-      // 5. Lerp viewmodel holder between hipfire (0.24, -0.22, -0.45) and ADS center (0, -0.15, -0.30)
+      // 5. Lerp viewmodel holder between hipfire and ADS center for any active GLB weapon (raygun, ak47, g95, hk33)
       if (rayGunViewmodelSlot) {
-        const isHoldingRayGun = Boolean(ge && ge.activeWeapon && ge.activeWeapon.id === 'raygun');
-        rayGunViewmodelSlot.visible = isHoldingRayGun;
-        if (ge && ge.currentModelMesh && isHoldingRayGun) {
-          ge.currentModelMesh.visible = false;
+        syncActiveGlbViewmodelVisibility(wid, Boolean(ge && ge.activeWeapon && ge.activeWeapon.isPap));
+
+        if (activeGlbEntry) {
+          const steadyMult = (ge && ge.isSteadyBreath) ? 0.22 : 1.0;
+          const swayMult = (1.0 - codViewmodelState.adsBlend * 0.80) * steadyMult;
+          const speedMag = (ge && ge.playerVelocity) ? Math.hypot(ge.playerVelocity.x, ge.playerVelocity.z) : 0;
+          const moveRatio = Math.min(1.0, speedMag / 4.0);
+          const walkPhase = ge ? (ge.walkTimer || codViewmodelState.idlePhase) : codViewmodelState.idlePhase;
+
+          const breathX = Math.sin(codViewmodelState.idlePhase) * 0.0025 * swayMult;
+          const breathY = Math.cos(codViewmodelState.idlePhase * 2.0) * 0.002 * swayMult;
+          const walkBobX = Math.sin(walkPhase) * 0.014 * moveRatio * swayMult;
+          const walkBobY = (Math.abs(Math.cos(walkPhase)) - 0.5) * 0.012 * moveRatio * swayMult;
+
+          _targetHolderPos.lerpVectors(
+            activeGlbEntry.hipOffset || COD_VIEWMODEL_CONFIG.hipOffset,
+            activeGlbEntry.adsOffset || COD_VIEWMODEL_CONFIG.adsOffset,
+            codViewmodelState.adsBlend
+          );
+
+          rayGunViewmodelSlot.position.set(
+            _targetHolderPos.x + breathX + walkBobX + codViewmodelState.swayX * swayMult,
+            _targetHolderPos.y + breathY + walkBobY + codViewmodelState.swayY * swayMult + codViewmodelState.reloadPitch * 0.16,
+            _targetHolderPos.z + codViewmodelState.recoilZ
+          );
+
+          rayGunViewmodelSlot.rotation.set(
+            -codViewmodelState.recoilPitch + codViewmodelState.reloadPitch + codViewmodelState.swayY * 1.15 * swayMult,
+            Math.PI + codViewmodelState.swayX * 1.25 * swayMult,
+            codViewmodelState.recoilRoll + codViewmodelState.reloadRoll - codViewmodelState.swayX * 0.85 * swayMult
+          );
+
+          if (activeGlbEntry.mixer && typeof activeGlbEntry.mixer.update === 'function') {
+            activeGlbEntry.mixer.update(delta);
+          }
         }
-
-        const steadyMult = (ge && ge.isSteadyBreath) ? 0.22 : 1.0;
-        const swayMult = (1.0 - codViewmodelState.adsBlend * 0.80) * steadyMult;
-        const speedMag = (ge && ge.playerVelocity) ? Math.hypot(ge.playerVelocity.x, ge.playerVelocity.z) : 0;
-        const moveRatio = Math.min(1.0, speedMag / 4.0);
-        const walkPhase = ge ? (ge.walkTimer || codViewmodelState.idlePhase) : codViewmodelState.idlePhase;
-
-        const breathX = Math.sin(codViewmodelState.idlePhase) * 0.0025 * swayMult;
-        const breathY = Math.cos(codViewmodelState.idlePhase * 2.0) * 0.002 * swayMult;
-        const walkBobX = Math.sin(walkPhase) * 0.014 * moveRatio * swayMult;
-        const walkBobY = (Math.abs(Math.cos(walkPhase)) - 0.5) * 0.012 * moveRatio * swayMult;
-
-        _targetHolderPos.lerpVectors(
-          COD_VIEWMODEL_CONFIG.hipOffset,
-          COD_VIEWMODEL_CONFIG.adsOffset,
-          codViewmodelState.adsBlend
-        );
-
-        rayGunViewmodelSlot.position.set(
-          _targetHolderPos.x + breathX + walkBobX + codViewmodelState.swayX * swayMult,
-          _targetHolderPos.y + breathY + walkBobY + codViewmodelState.swayY * swayMult,
-          _targetHolderPos.z + codViewmodelState.recoilZ
-        );
-
-        rayGunViewmodelSlot.rotation.set(
-          -codViewmodelState.recoilPitch + codViewmodelState.swayY * 1.15 * swayMult,
-          Math.PI + codViewmodelState.swayX * 1.25 * swayMult,
-          codViewmodelState.recoilRoll - codViewmodelState.swayX * 0.85 * swayMult
-        );
       }
 
-      if (rayGunMixer && typeof rayGunMixer.update === 'function') {
-        rayGunMixer.update(delta);
+      if (mysteryBoxGlbMixer && typeof mysteryBoxGlbMixer.update === 'function') {
+        mysteryBoxGlbMixer.update(delta);
       }
+
       updateBarrelSmokePuffs(delta);
     }
 
@@ -17573,9 +18336,19 @@
     const _critBloodDropMat = new THREE.MeshBasicMaterial({ color: 0xef4444 });
 
     function clearAllActiveHitboxes() {
+      for (let i = activeHitboxes.length - 1; i >= 0; i--) {
+        const hb = activeHitboxes[i];
+        if (hb) {
+          hb.visible = false;
+          if (hb.parent) hb.parent.remove(hb);
+        }
+      }
       activeHitboxes.length = 0;
     }
 
+    // IMMEDIATE HITBOX REMOVAL ON DEATH:
+    // Splice torso & head hitboxes out of activeHitboxes, set visible = false, and detach from parent
+    // so dead bodies never block shots aimed at zombies behind them and never leave stray white cylinders behind.
     function removeZombieCollidersFromActiveHitboxes(zombie) {
       if (!zombie) return;
       if (zombie.torsoCollider) {
@@ -17741,9 +18514,9 @@
 
         if (ge) syncPhase1StateFromEngine(ge);
 
-        // Subtle upward camera recoil kick on weapon discharge + Ray Gun skeletal fire animation
+        // Subtle upward camera recoil kick on weapon discharge + active GLB weapon fire animation
         triggerCameraRecoil(targetCam, COMBAT_CONFIG.recoilKickRad * 0.45);
-        triggerRayGunFireAnimation();
+        triggerActiveGlbWeaponFire();
 
         // If GameEngine.tryFire() already processed ballistics on this click, avoid double-damaging
         if (ge && Math.abs((now / 1000) - ge.lastFireTime) < 0.04) {
@@ -17780,7 +18553,7 @@
           if (ge && typeof ge.killZombie === 'function') {
             ge.killZombie(zombie, isHeadshot, hit.point);
           } else {
-            triggerZombieDeathState(zombie, ge ? ge.scene : null, 2500);
+            triggerZombieDeathState(zombie, ge ? ge.scene : null, 2200);
             awardCombatPoints(killPts, true, isHeadshot);
           }
         } else {
@@ -17825,17 +18598,10 @@
     }
 
     // ============================================================================
-    // === [SEC-18] ANIMATION SUBCLIPS, ZOMBIE LOCOMOTION & BARRICADE BREACHES ===
+    // === [SEC-18] ZOMBIE DEATH & CLEANUP, CLAMPED SUBCLIPS & BARRICADE BREACHES ===
+    // === ZOMBIE DEATH & CLEANUP ===
     // === ZOMBIE AI, COLLAPSE & COD DEATH EFFECTS ===
     // ============================================================================
-    const DRACO_DECODER_URL = 'https://www.gstatic.com/draco/versioned/decoders/1.5.7/';
-
-    const ZOMBIE_PACK_URL = 'https://raw.githubusercontent.com/frankiegluisi-cyber/Yay/main/polyart_zombies_with_animations_free_pack%20(1).glb';
-    const ZOMBIE_PACK_FALLBACK_URL = 'https://raw.githubusercontent.com/frankiegluisi-cyber/Game-Graphic-Files/main/polyart_zombies_with_animations_free_pack%20(1).glb';
-
-    const RAY_GUN_URL = 'https://raw.githubusercontent.com/frankiegluisi-cyber/Yay/main/Ray_gun_-_call_of_duty%20(1).glb';
-    const RAY_GUN_FALLBACK_URL = 'https://raw.githubusercontent.com/frankiegluisi-cyber/Game-Graphic-Files/main/ray_gun_-_call_of_duty%20(1).glb';
-
     const ZOMBIE_CLIP_FPS = 30;
     const WALK_START_FRAME = 0;
     const WALK_END_FRAME = 37;       // endFrame + 1 for seamless walk loop
@@ -17844,72 +18610,17 @@
     const DEATH_START_FRAME = 165;
     const DEATH_END_FRAME = 222;     // endFrame + 1 for death collapse
 
-    const phase2DracoLoader = new THREE.DRACOLoader();
-    phase2DracoLoader.setDecoderPath(DRACO_DECODER_URL);
-
-    const phase2GltfLoader = new THREE.GLTFLoader();
-    phase2GltfLoader.setDRACOLoader(phase2DracoLoader);
-
     const activeZombieMixers = [];          // Active THREE.AnimationMixer instances (alive + dying)
     const isolatedZombieRigTemplates = [];  // { rigName, template, walkClip, attackClip, deathClip, hasValidDeathClip }
     let isolatedZombieRigTemplate = null;
     let masterWalkSubclip = null;
     let masterAttackSubclip = null;
     let masterDeathSubclip = null;
-    let _phase2AssetsInitialized = false;
 
     const dyingZombies = [];
     const _knockbackDir = new THREE.Vector3();
     const _toPlayerDir = new THREE.Vector3();
     const _sepVec = new THREE.Vector3();
-
-    function loadGlbWithFallback(primaryUrl, fallbackUrl, onSuccess, onError) {
-      if (!primaryUrl) return;
-      phase2GltfLoader.load(
-        primaryUrl,
-        (gltf) => {
-          if (gltf && gltf.scene && typeof onSuccess === 'function') {
-            onSuccess(gltf);
-          }
-        },
-        undefined,
-        () => {
-          if (fallbackUrl && fallbackUrl !== primaryUrl) {
-            phase2GltfLoader.load(
-              fallbackUrl,
-              (gltf) => {
-                if (gltf && gltf.scene && typeof onSuccess === 'function') {
-                  onSuccess(gltf);
-                }
-              },
-              undefined,
-              onError
-            );
-          } else if (typeof onError === 'function') {
-            onError();
-          }
-        }
-      );
-    }
-
-    function initPhase2Assets(camera) {
-      if (_phase2AssetsInitialized) return;
-      _phase2AssetsInitialized = true;
-
-      loadGlbWithFallback(
-        ZOMBIE_PACK_URL,
-        ZOMBIE_PACK_FALLBACK_URL,
-        (gltf) => setupZombiePackTemplates(gltf),
-        (err) => console.warn('[Phase 2] Zombie Pack GLB load warning:', err)
-      );
-
-      loadGlbWithFallback(
-        RAY_GUN_URL,
-        RAY_GUN_FALLBACK_URL,
-        (gltf) => setupRayGunViewmodel(gltf, camera),
-        (err) => console.warn('[Phase 2] Ray Gun GLB load warning:', err)
-      );
-    }
 
     function sliceAnimationSubclip(sourceClip, subName, startFrame, endFrame, fps = ZOMBIE_CLIP_FPS) {
       if (!sourceClip || !THREE.AnimationUtils || typeof THREE.AnimationUtils.subclip !== 'function') {
@@ -18027,6 +18738,9 @@
       if (!gltf || !gltf.scene) return;
       runWithErrorBoundary('setupZombiePackTemplates', () => {
         const animations = Array.isArray(gltf.animations) ? gltf.animations : [];
+        window.__outbreakAssetReport.loadedModels.zombiePack = true;
+        window.__outbreakAssetReport.detectedClips.zombiePack = animations.map((c) => c.name);
+
         const fullClip =
           THREE.AnimationClip.findByName(animations, 'Take 001') ||
           animations[0] ||
@@ -18096,9 +18810,23 @@
         }
       });
 
+      // Completely hide ALL procedural fallback meshes & hitboxes so zero stray white cylinders ever render
       if (zombie.model) {
         if (zombie.model.hipsPivot) zombie.model.hipsPivot.visible = false;
         if (zombie.model.ghostRoot) zombie.model.ghostRoot.visible = false;
+        if (zombie.model.neckGroup) zombie.model.neckGroup.visible = false;
+        if (zombie.model.head) zombie.model.head.visible = false;
+        const procHitboxes = [
+          'headHitbox', 'bodyHitbox', 'pustuleHitbox',
+          'leftArmHitbox', 'rightArmHitbox', 'leftLegHitbox', 'rightLegHitbox'
+        ];
+        for (let i = 0; i < procHitboxes.length; i++) {
+          const hb = zombie.model[procHitboxes[i]];
+          if (hb) {
+            hb.visible = false;
+            if (hb.parent) hb.parent.remove(hb);
+          }
+        }
       }
 
       hostGroup.add(clonedRig);
@@ -18276,9 +19004,11 @@
       }, 120);
     }
 
-    // On Death (health <= 0): Immediately set state = 'dead', splice colliders out of activeHitboxes,
-    // play deathClip, and remove & dispose mesh/materials after 2.5s.
-    function triggerZombieDeathState(zombie, sceneRef, removeDelayMs = 2500) {
+    // CLAMPED DEATH ANIMATION & CLEANUP:
+    // Play death clip with setLoop(THREE.LoopOnce, 1) and clampWhenFinished = true (0.15s crossfade from walk +
+    // procedural floor-collapse fallback), keep calling mixer.update(delta) during the ~2.2s death linger window,
+    // then call mixer.stopAllAction(), mixer.uncacheRoot(root), remove mesh from parent, and splice out of activeEnemies.
+    function triggerZombieDeathState(zombie, sceneRef, removeDelayMs = 2200) {
       if (!zombie || zombie._deathCleanupScheduled) return;
       zombie._deathCleanupScheduled = true;
 
@@ -18286,8 +19016,12 @@
       zombie.isDead = true;
       clearTimeout(zombie._hitFlashTimeout);
 
-      // Immediately splice torso & head colliders out of activeHitboxes so dead bodies never block bullets
+      // Immediately splice torso & head colliders out of activeHitboxes and detach from parent
       removeZombieCollidersFromActiveHitboxes(zombie);
+
+      // Immediately splice dead zombie out of activeEnemies
+      const aeIdx = activeEnemies.indexOf(zombie);
+      if (aeIdx !== -1) activeEnemies.splice(aeIdx, 1);
 
       const meshObj = zombie.mesh || (zombie.model && zombie.model.group);
       const targetScene = sceneRef || (window.gameEngine && window.gameEngine.scene);
@@ -18335,29 +19069,47 @@
         }
       }
 
+      const lingerMs = Math.min(2200, Math.max(1500, removeDelayMs || 2200));
       zombie._deathElapsed = 0;
-      zombie._deathDurationSec = removeDelayMs / 1000;
+      zombie._deathDurationSec = lingerMs / 1000;
       dyingZombies.push(zombie);
 
-      setTimeout(() => {
-        const dIdx = dyingZombies.indexOf(zombie);
-        if (dIdx !== -1) dyingZombies.splice(dIdx, 1);
+      zombie._deathCleanupTimer = setTimeout(() => {
+        finalizeDeadZombieCleanup(zombie, targetScene);
+      }, lingerMs);
+    }
 
-        if (zombie.mixer) {
-          zombie.mixer.stopAllAction();
-          if (zombie.phase2RigRoot) {
-            zombie.mixer.uncacheRoot(zombie.phase2RigRoot);
-          }
-          const mIdx = activeZombieMixers.indexOf(zombie.mixer);
-          if (mIdx !== -1) activeZombieMixers.splice(mIdx, 1);
-          zombie.mixer = null;
+    function finalizeDeadZombieCleanup(zombie, sceneRef) {
+      if (!zombie) return;
+      clearTimeout(zombie._deathCleanupTimer);
+      clearTimeout(zombie._hitFlashTimeout);
+
+      const dIdx = dyingZombies.indexOf(zombie);
+      if (dIdx !== -1) dyingZombies.splice(dIdx, 1);
+
+      const aeIdx = activeEnemies.indexOf(zombie);
+      if (aeIdx !== -1) activeEnemies.splice(aeIdx, 1);
+
+      removeZombieCollidersFromActiveHitboxes(zombie);
+
+      if (zombie.mixer) {
+        zombie.mixer.stopAllAction();
+        if (zombie.phase2RigRoot) {
+          zombie.mixer.uncacheRoot(zombie.phase2RigRoot);
         }
-        if (meshObj && targetScene) {
-          targetScene.remove(meshObj);
-        }
-        // Memory cleanup: dispose per-instance cloned materials when dead zombie is purged
-        disposeEntityResources(zombie);
-      }, removeDelayMs);
+        const mIdx = activeZombieMixers.indexOf(zombie.mixer);
+        if (mIdx !== -1) activeZombieMixers.splice(mIdx, 1);
+        zombie.mixer = null;
+      }
+
+      const meshObj = zombie.mesh || (zombie.model && zombie.model.group);
+      const targetScene = sceneRef || (window.gameEngine && window.gameEngine.scene);
+      if (meshObj) {
+        if (meshObj.parent) meshObj.parent.remove(meshObj);
+        else if (targetScene) targetScene.remove(meshObj);
+      }
+
+      disposeEntityResources(zombie);
     }
 
     function updateDyingZombiesVisuals(delta) {
@@ -18365,7 +19117,7 @@
         const z = dyingZombies[i];
         if (!z) continue;
         z._deathElapsed = (z._deathElapsed || 0) + delta;
-        const duration = z._deathDurationSec || 2.5;
+        const duration = z._deathDurationSec || 2.2;
         const progress = Math.min(1, z._deathElapsed / duration);
         const meshObj = z.mesh || (z.model && z.model.group);
 
@@ -18768,8 +19520,61 @@
     }
 
     // ============================================================================
-    // === [SEC-19] LIVE POINT ECONOMY HUD, BUYABLE DOORS & BOOTSTRAP ===
+    // === [SEC-19] INPUT, RESET STABILITY, ECONOMY HUD & RENDER LOOP ===
+    // === INPUT & RESET ===
     // ============================================================================
+    function purgeAllPhase2ZombiesAndMixers() {
+      const ge = window.gameEngine;
+      const sceneRef = ge ? ge.scene : null;
+
+      for (let i = dyingZombies.length - 1; i >= 0; i--) {
+        finalizeDeadZombieCleanup(dyingZombies[i], sceneRef);
+      }
+      dyingZombies.length = 0;
+
+      for (let i = activeEnemies.length - 1; i >= 0; i--) {
+        finalizeDeadZombieCleanup(activeEnemies[i], sceneRef);
+      }
+      activeEnemies.length = 0;
+
+      for (let i = activeZombieMixers.length - 1; i >= 0; i--) {
+        const m = activeZombieMixers[i];
+        if (m && typeof m.stopAllAction === 'function') {
+          m.stopAllAction();
+        }
+      }
+      activeZombieMixers.length = 0;
+
+      clearAllActiveHitboxes();
+
+      for (let i = _codDeathActive.length - 1; i >= 0; i--) {
+        const p = _codDeathActive[i];
+        if (p && p.mesh && sceneRef) sceneRef.remove(p.mesh);
+      }
+      _codDeathActive.length = 0;
+
+      for (let i = _bloodBurstParticles.length - 1; i >= 0; i--) {
+        const p = _bloodBurstParticles[i];
+        if (p && p.mesh && sceneRef) sceneRef.remove(p.mesh);
+      }
+      _bloodBurstParticles.length = 0;
+
+      for (let i = _activeSplinters.length - 1; i >= 0; i--) {
+        const s = _activeSplinters[i];
+        if (s && s.mesh && sceneRef) sceneRef.remove(s.mesh);
+      }
+      _activeSplinters.length = 0;
+
+      codViewmodelState.isADS = false;
+      codViewmodelState.adsBlend = 0;
+      codViewmodelState.recoilZ = 0;
+      codViewmodelState.recoilPitch = 0;
+      codViewmodelState.recoilRoll = 0;
+      codViewmodelState.reloadPitch = 0;
+      codViewmodelState.reloadRoll = 0;
+    }
+    window.purgeAllPhase2ZombiesAndMixers = purgeAllPhase2ZombiesAndMixers;
+
     function syncPhase1StateFromEngine(ge) {
       if (!ge) return;
       playerPoints = ge.score;
@@ -18777,7 +19582,7 @@
       activeEnemies.length = 0;
       for (let i = 0; i < live.length; i++) {
         const e = live[i];
-        if (!e) continue;
+        if (!e || e.isDead || e.state === 'dead') continue;
         if (!e.mesh && e.model && e.model.group) e.mesh = e.model.group;
         activeEnemies.push(e);
       }
@@ -18948,77 +19753,6 @@
       }
     }
 
-    // Error-Guarded 60 FPS Animation & Combat Update Loop
-    const phase2Clock = new THREE.Clock();
-
-    function updatePhase2Animations(delta) {
-      runWithErrorBoundary('updatePhase2Animations', () => {
-        const ge = window.gameEngine;
-        const playerPos = ge ? ge.playerPos : null;
-        const frameIdx = ge ? (ge._frameCounter || 0) : 0;
-
-        // 1. Ensure newly spawned zombies receive isolated cloned rig, tight bone hitboxes & subclips
-        for (let i = 0; i < activeEnemies.length; i++) {
-          const z = activeEnemies[i];
-          if (!z || z.isDead) continue;
-          if (!z.phase2RigAttached) {
-            attachPhase2RigToZombie(z);
-          }
-          if (z.state === 'walk' && playerPos) {
-            updateZombieWalkState(z, playerPos, delta);
-          }
-        }
-
-        // 2. Update every zombie's THREE.AnimationMixer with Distance-Based LOD Stepping
-        // Close or dying zombies (< 16m) step every frame (60 FPS); distant zombies (>= 16m) step every 2nd frame
-        for (let i = activeZombieMixers.length - 1; i >= 0; i--) {
-          const mixer = activeZombieMixers[i];
-          if (mixer && typeof mixer.update === 'function') {
-            const z = mixer._ownerZombie;
-            let stepNow = true;
-            if (z && !z.isDead && z.state !== 'dead' && playerPos && z.pos) {
-              const dx = z.pos.x - playerPos.x;
-              const dz = z.pos.z - playerPos.z;
-              if (dx * dx + dz * dz > 256) {
-                stepNow = ((frameIdx + i) & 1) === 0;
-              }
-            }
-            if (stepNow) {
-              const stepDt = delta + (mixer._accumDelta || 0);
-              mixer._accumDelta = 0;
-              mixer.update(stepDt);
-            } else {
-              mixer._accumDelta = (mixer._accumDelta || 0) + delta;
-            }
-          } else {
-            activeZombieMixers.splice(i, 1);
-          }
-        }
-
-        // 3. Advance dying zombie collapse/sink, CoD death bursts, localized blood bursts, wood splinters & 1.0s sliding doors
-        if (dyingZombies.length > 0) updateDyingZombiesVisuals(delta);
-        if (_codDeathActive.length > 0) updateCoDDeathBursts(delta);
-        if (_bloodBurstParticles.length > 0) updateBloodBurstParticles(delta);
-        if (_activeSplinters.length > 0) updateWoodSplinters(delta);
-        if (slidingDoorAnimations.length > 0) updateSlidingDoors(delta);
-
-        // 4. Advance Call of Duty weapon viewmodel, ADS Iron Sights (75->50 FOV), sway, recoil & barrel smoke
-        updateCoDViewmodelAndADS(delta);
-      });
-    }
-
-    function updateCombatFrame(dt) {
-      runWithErrorBoundary('updateCombatFrame', () => {
-        const delta = Math.min(0.05, phase2Clock.getDelta() || dt || 0.016);
-        const ge = window.gameEngine;
-        if (ge) {
-          syncPhase1StateFromEngine(ge);
-          updateCameraRecoilRecovery(ge.camera, delta);
-        }
-        updatePhase2Animations(delta);
-      });
-    }
-
     // Bind input listeners once with duplicate-binding guard
     function bindCombatAndWeaponListenersOnce(playerContainer, camera) {
       if (window.__outbreakCombatListenersBound) return;
@@ -19060,13 +19794,88 @@
       });
     }
 
+    // ============================================================================
+    // === [SEC-20] UNIFIED 60 FPS ANIMATION & COMBAT RENDER LOOP ===
+    // === RENDER LOOP ===
+    // === RENDER & LIFECYCLE LOOP ===
+    // ============================================================================
+    const phase2Clock = new THREE.Clock();
+
+    function updatePhase2Animations(delta) {
+      runWithErrorBoundary('updatePhase2Animations', () => {
+        const ge = window.gameEngine;
+        const playerPos = ge ? ge.playerPos : null;
+        const frameIdx = ge ? (ge._frameCounter || 0) : 0;
+
+        // 1. Ensure newly spawned zombies receive isolated cloned rig, tight bone hitboxes & subclips
+        for (let i = 0; i < activeEnemies.length; i++) {
+          const z = activeEnemies[i];
+          if (!z || z.isDead || z.state === 'dead') continue;
+          if (!z.phase2RigAttached) {
+            attachPhase2RigToZombie(z);
+          }
+          if (z.state === 'walk' && playerPos) {
+            updateZombieWalkState(z, playerPos, delta);
+          }
+        }
+
+        // 2. Update every zombie's THREE.AnimationMixer with Distance-Based LOD Stepping
+        // Close or dying zombies (< 16m) step every frame (60 FPS); distant zombies (>= 16m) step every 2nd frame
+        for (let i = activeZombieMixers.length - 1; i >= 0; i--) {
+          const mixer = activeZombieMixers[i];
+          if (mixer && typeof mixer.update === 'function') {
+            const z = mixer._ownerZombie;
+            let stepNow = true;
+            if (z && !z.isDead && z.state !== 'dead' && playerPos && z.pos) {
+              const dx = z.pos.x - playerPos.x;
+              const dz = z.pos.z - playerPos.z;
+              if (dx * dx + dz * dz > 256) {
+                stepNow = ((frameIdx + i) & 1) === 0;
+              }
+            }
+            if (stepNow) {
+              const stepDt = delta + (mixer._accumDelta || 0);
+              mixer._accumDelta = 0;
+              mixer.update(stepDt);
+            } else {
+              mixer._accumDelta = (mixer._accumDelta || 0) + delta;
+            }
+          } else {
+            activeZombieMixers.splice(i, 1);
+          }
+        }
+
+        // 3. Advance dying zombie collapse/sink, CoD death bursts, localized blood bursts, wood splinters & 1.0s sliding doors
+        if (dyingZombies.length > 0) updateDyingZombiesVisuals(delta);
+        if (_codDeathActive.length > 0) updateCoDDeathBursts(delta);
+        if (_bloodBurstParticles.length > 0) updateBloodBurstParticles(delta);
+        if (_activeSplinters.length > 0) updateWoodSplinters(delta);
+        if (slidingDoorAnimations.length > 0) updateSlidingDoors(delta);
+
+        // 4. Advance Call of Duty weapon viewmodels (Ray Gun, AK-47, G95 A1, HK33), Mystery Box mixer, ADS & recoil
+        updateCoDViewmodelAndADS(delta);
+      });
+    }
+
+    function updateCombatFrame(dt) {
+      runWithErrorBoundary('updateCombatFrame', () => {
+        const delta = Math.min(0.05, phase2Clock.getDelta() || dt || 0.016);
+        const ge = window.gameEngine;
+        if (ge) {
+          syncPhase1StateFromEngine(ge);
+          updateCameraRecoilRecovery(ge.camera, delta);
+        }
+        updatePhase2Animations(delta);
+      });
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       if (window.gameEngine) return; // Guard against duplicate initialization
       window.gameEngine = new GameEngine();
       const playerContainer = { position: window.gameEngine.playerPos };
       const camera = window.gameEngine.camera;
 
-      // Initialize Draco-compressed Zombie Pack, Call of Duty Ray Gun Viewmodel, Barricade Zones & Buyable Door Zones
+      // Initialize Draco-compressed GitHub GLB Assets (Zombies, Ray Gun, AK-47, G95 A1, HK33, Mystery Box, WW2 Environment)
       initPhase2Assets(camera);
       initMapBarricadeZones(window.gameEngine);
       initInteractableDoorZones(window.gameEngine);
@@ -19079,3 +19888,4 @@
   </script>
 </body>
 </html>
+
